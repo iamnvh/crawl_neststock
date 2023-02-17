@@ -7,7 +7,7 @@ from datetime import datetime
 from threading import Thread
 
 def get_info(link, conn):
-    try: 
+    try:
         # init data
         data = {}
         html = requests.get(link).content
@@ -196,39 +196,14 @@ def run():
         links = open('links_duli_thue.txt', 'r', encoding='utf-8')
         links = links.read().splitlines()
         lenght = len(links)
+        num_thread = 10
         i = 0
         while i < lenght:
-            thread1 = Thread(target=get_info, args=(links[i],conn, ))
-            thread2 = Thread(target=get_info, args=(links[i+1],conn, ))
-            thread3 = Thread(target=get_info, args=(links[i+2],conn, ))
-            thread4 = Thread(target=get_info, args=(links[i+3],conn, ))
-            thread5 = Thread(target=get_info, args=(links[i+4],conn, ))
-            thread6 = Thread(target=get_info, args=(links[i+5],conn, ))
-            thread7 = Thread(target=get_info, args=(links[i+6],conn, ))
-            thread8 = Thread(target=get_info, args=(links[i+7],conn, ))
-            thread9 = Thread(target=get_info, args=(links[i+8],conn, ))
-            thread10 = Thread(target=get_info, args=(links[i+9],conn, ))
-            thread1.start()
-            thread2.start()
-            thread3.start()
-            thread4.start()
-            thread5.start()
-            thread6.start()
-            thread7.start()
-            thread8.start()
-            thread9.start()
-            thread10.start()
-            thread1.join()
-            thread2.join()
-            thread3.join()
-            thread4.join()
-            thread5.join()
-            thread6.join()
-            thread7.join()
-            thread8.join()
-            thread9.join()
-            thread10.join()
-            i+=10
+            for j in range(num_thread):
+                thread = Thread(target=get_info, args=(links[i+j], conn, ))
+                thread.start()
+                thread.join()
+            i+=num_thread
             print("--------------Done "+str(i)+' links -----------------')
     except:
         print("Could not connect to MongoDB")
