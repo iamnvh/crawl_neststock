@@ -16,28 +16,26 @@ def init_browser():
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
     chrome_options.add_argument("--incognito")
-    # chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--headless')
     browser = webdriver.Chrome(ChromeDriverManager().install(), chrome_options=chrome_options)
     return browser
 
 def get_links(link, max_page):
     browser = init_browser()
-    links = []
+    w_file = open('links.txt', 'a', encoding='utf-8')
     for i in range(max_page):
         browser.get(link+'page/'+str(i+1))
-        time.sleep(random.randint(1,3))
+        time.sleep(1)
+        print('-----------------------Load page '+str(i+1)+' ----------------------')
         list = browser.find_elements(By.CLASS_NAME, 'mt-4')
         del list[0]
         for j in list:
             tag_a_href = j.find_element(By.TAG_NAME, 'a').get_attribute('href')
-            links.append(tag_a_href)
-        time.sleep(random.randint(1, 3))
-    
-    w_file = open('links.txt', 'a', encoding='utf-8')
-    for i in links:
-        w_file.write(i+'\n')
+            w_file.write(tag_a_href+'\n')
+        print('-----------------------Done page '+str(i+1)+' ----------------------')
+            
     w_file.close()
     browser.close()
 
 
-get_links('https://nhaphonet.vn/nha-dat/ban-nha-mat-pho-quan-ba-dinh-ha-noi/', 3)
+get_links('https://nhaphonet.vn/nha-dat/cho-thue-nha-ha-noi/', 70)
